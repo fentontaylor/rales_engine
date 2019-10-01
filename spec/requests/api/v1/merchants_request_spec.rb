@@ -9,7 +9,11 @@ describe "Merchants API" do
     expect(response).to be_successful
 
     merchants = JSON.parse(response.body)
-
+    binding.pry
     expect(merchants.count).to eq(3)
+  end
+
+  it 'can get one item by its id' do
+
   end
 end
