@@ -39,8 +39,9 @@ describe Merchant do
       create(:transaction, invoice: invoice_4, result: 'success')
       create(:transaction, invoice: invoice_5, result: 'success')
 
-      result = Merchant.most_revenue(2)
-      expect(result).to eq([merchant_3, merchant_2])
+      expect( Merchant.most_revenue(2) ).to eq([merchant_3, merchant_2])
+
+      expect( Merchant.most_revenue(1) ).to eq([merchant_3])
     end
   end
 end

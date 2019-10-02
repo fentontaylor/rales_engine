@@ -93,7 +93,6 @@ describe "Merchants API" do
     create(:transaction, invoice: invoice_4, result: 'success')
     create(:transaction, invoice: invoice_5, result: 'success')
 
-
     get "/api/v1/merchants/most_revenue?quantity=2"
 
     expect(response).to be_successful
@@ -103,5 +102,20 @@ describe "Merchants API" do
     expect(json['data'].first['id']).to eq(merchant_3.id.to_s)
     expect(json['data'][1]['id']).to eq(merchant_2.id.to_s)
     expect(json['data'].count).to eq(2)
+
+
+    get "/api/v1/merchants/most_revenue?quantity=1"
+
+    json = JSON.parse(response.body)
+
+    expect(json['data'].first['id']).to eq(merchant_3.id.to_s)
+    expect(json['data'].count).to eq(1)
+
+
+    get "/api/v1/merchants/most_revenue?quantity=a"
+
+    json = JSON.parse(response.body)
+
+    expect(json['data']).to eq([])
   end
 end
