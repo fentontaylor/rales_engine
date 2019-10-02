@@ -96,7 +96,6 @@ describe "Merchants API" do
     get "/api/v1/merchants/most_revenue?quantity=2"
 
     expect(response).to be_successful
-
     json = JSON.parse(response.body)
 
     expect(json['data'].first['id']).to eq(merchant_3.id.to_s)
@@ -107,7 +106,6 @@ describe "Merchants API" do
     get "/api/v1/merchants/most_revenue?quantity=1"
 
     json = JSON.parse(response.body)
-
     expect(json['data'].first['id']).to eq(merchant_3.id.to_s)
     expect(json['data'].count).to eq(1)
 
@@ -115,7 +113,6 @@ describe "Merchants API" do
     get "/api/v1/merchants/most_revenue?quantity=a"
 
     json = JSON.parse(response.body)
-
     expect(json['data']).to eq([])
   end
 end
