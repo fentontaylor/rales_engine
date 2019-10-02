@@ -8,7 +8,7 @@ class InvoiceItem < ApplicationRecord
   belongs_to :invoice
 
   def dollar_price_as_string
-    digits = unit_price.to_s.split('')
+    digits = self.unit_price.to_s.split('')
     cents = digits.pop(2)
     digits.join + '.' + cents.join
   end

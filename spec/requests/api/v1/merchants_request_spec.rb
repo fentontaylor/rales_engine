@@ -67,4 +67,17 @@ describe "Merchants API" do
 
     expect(json['data'].count).to eq(2)
   end
+
+  it 'can return the top x merchants, ranked by total revenue' do
+    merchant_1 = create(:merchant)
+    merchant_2 = create(:merchant)
+    merchant_3 = create(:merchant)
+
+    get "/api/v1/merchants/most_revenue?quantity=2"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+    
+  end
 end
