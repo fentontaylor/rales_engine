@@ -4,4 +4,7 @@ class Transaction < ApplicationRecord
   validates_presence_of :invoice_id
 
   belongs_to :invoice
+
+  scope :successful, -> { where(result: 'success') }
+
 end
