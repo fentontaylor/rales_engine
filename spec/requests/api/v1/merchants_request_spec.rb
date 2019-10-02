@@ -115,4 +115,8 @@ describe "Merchants API" do
     json = JSON.parse(response.body)
     expect(json['data']).to eq([])
   end
+
+  it 'can return the customer who has the most successful transactions' do
+
+  end
 end
