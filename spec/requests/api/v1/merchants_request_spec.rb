@@ -69,15 +69,39 @@ describe "Merchants API" do
   end
 
   it 'can return the top x merchants, ranked by total revenue' do
+    # has one huge sale, but the transaction failed
     merchant_1 = create(:merchant)
+    invoice_1 = create(:invoice, merchant: merchant_1)
+    create(:invoice_item, invoice: invoice_1, unit_price: 1000000)
+    create(:transaction, invoice: invoice_1, result: 'failed')
+
+    # has 2 small sales, 2nd place
     merchant_2 = create(:merchant)
+    invoice_2 = create(:invoice, merchant: merchant_2)
+    invoice_3 = create(:invoice, merchant: merchant_2)
+    create(:invoice_item, invoice: invoice_2)
+    create(:invoice_item, invoice: invoice_3)
+    create(:transaction, invoice: invoice_2, result: 'success')
+    create(:transaction, invoice: invoice_3, result: 'success')
+
+    # has 2 medium sales, 1st place
     merchant_3 = create(:merchant)
+    invoice_4 = create(:invoice, merchant: merchant_3)
+    invoice_5 = create(:invoice, merchant: merchant_3)
+    create(:invoice_item, invoice: invoice_4, quantity: 4)
+    create(:invoice_item, invoice: invoice_5, quantity: 5)
+    create(:transaction, invoice: invoice_4, result: 'success')
+    create(:transaction, invoice: invoice_5, result: 'success')
+
 
     get "/api/v1/merchants/most_revenue?quantity=2"
 
     expect(response).to be_successful
 
     json = JSON.parse(response.body)
-    
+
+    expect(json['data'].first['id']).to eq(merchant_3.id.to_s)
+    expect(json['data'][1]['id']).to eq(merchant_2.id.to_s)
+    expect(json['data'].count).to eq(2)
   end
 end
