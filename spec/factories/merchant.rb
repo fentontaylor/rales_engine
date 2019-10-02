@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :merchant do
-    name { 'Bob Ross Paints' }
+    sequence(:name) { |x| "Bob Ross Paints #{x}" }
   end
 end
