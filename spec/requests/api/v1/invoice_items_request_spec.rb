@@ -20,7 +20,7 @@ describe 'InvoiceItems API' do
     expect(first['attributes']['invoice_id']).to eq(invoice_item_1.invoice_id)
     expect(first['attributes']['item_id']).to eq(invoice_item_1.item_id)
     expect(first['attributes']['quantity']).to eq(invoice_item_1.quantity)
-    expect(first['attributes']['unit_price']).to eq(invoice_item_1.unit_price)
+    expect(first['attributes']['unit_price']).to eq(invoice_item_1.dollar_price_as_string)
 
     expect(json['data'].count).to eq(3)
   end
