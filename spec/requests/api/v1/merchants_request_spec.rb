@@ -117,6 +117,39 @@ describe "Merchants API" do
   end
 
   it 'can return the customer who has the most successful transactions' do
+    merchant = create(:merchant)
 
+    # 1 successful transaction
+    customer_1 = create(:customer)
+    invoice_1 = create(:invoice, merchant: merchant, customer: customer_1)
+    create(:transaction, invoice: invoice_1)
+
+    # 3 successful transactions
+    customer_2 = create(:customer)
+    invoice_2 = create(:invoice, merchant: merchant, customer: customer_2)
+    invoice_3 = create(:invoice, merchant: merchant, customer: customer_2)
+    invoice_4 = create(:invoice, merchant: merchant, customer: customer_2)
+    create(:transaction, invoice: invoice_2)
+    create(:transaction, invoice: invoice_3)
+    create(:transaction, invoice: invoice_4)
+
+    # 2 successful transactions, 2 failed
+    customer_3 = create(:customer)
+    invoice_5 = create(:invoice, merchant: merchant, customer: customer_3)
+    invoice_6 = create(:invoice, merchant: merchant, customer: customer_3)
+    invoice_7 = create(:invoice, merchant: merchant, customer: customer_3)
+    invoice_8 = create(:invoice, merchant: merchant, customer: customer_3)
+    create(:transaction, invoice: invoice_5)
+    create(:transaction, invoice: invoice_6)
+    create(:transaction, invoice: invoice_7, result: 'failed')
+    create(:transaction, invoice: invoice_8, result: 'failed')
+
+    get "/api/v1/merchants/#{merchant.id}/favorite_customer"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data']['attributes']['id']).to eq(customer_2.id)
   end
 end
