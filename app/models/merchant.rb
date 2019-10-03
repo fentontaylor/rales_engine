@@ -40,7 +40,12 @@ class Merchant < ApplicationRecord
   end
 
   def self.find_by_lower_name(name)
-    where('lower(name) like ?', "%#{name.downcase}%").first  
+    where('lower(name) like ?', "%#{name.downcase}%").first
+  end
+
+  def self.find_by_flex_date(args)
+    args.transform_values! { |v| DateTime.xmlschema(v)}
+    where(args).first
   end
 
   def favorite_customer

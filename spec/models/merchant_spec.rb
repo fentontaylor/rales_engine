@@ -70,6 +70,13 @@ describe Merchant do
       expect(Merchant.find_by_lower_name('bob shop')).to eq(merchant)
       expect(Merchant.find_by_lower_name('BOB SHOP')).to eq(merchant)
     end
+
+    it '::find_by_flex_date' do
+      ignore = create(:merchant)
+      merchant = create(:merchant, name: 'Bob Shop', created_at: '2019-10-03 09:34:45 UTC')
+
+      expect(Merchant.find_by_flex_date(created_at: '2019-10-03T09:34:45Z'))
+    end
   end
 
   describe 'instance methods' do
