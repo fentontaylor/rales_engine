@@ -39,6 +39,15 @@ class Merchant < ApplicationRecord
     result.first
   end
 
+  def self.find_by_lower_name(name)
+    where('lower(name) like ?', "%#{name.downcase}%").first
+  end
+
+  def self.find_by_flex_date(args)
+    args.transform_values! { |v| DateTime.xmlschema(v) }
+    where(args).first
+  end
+
   def favorite_customer
     sql = "SELECT c.*, count(*) as num_transactions " +
             "FROM customers c " +
