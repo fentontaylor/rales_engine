@@ -32,5 +32,6 @@ describe 'Transactions API' do
     json = JSON.parse(response.body)
 
     expect(json['data']['id']).to eq(transaction.id.to_s)
+    expect([json['data']].count).to eq(1)
   end
 end
