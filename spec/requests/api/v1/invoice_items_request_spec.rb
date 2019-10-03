@@ -48,5 +48,20 @@ describe 'InvoiceItems API' do
     json = JSON.parse(response.body)
 
     expect(json['data']['id']).to eq(invoice.id.to_s)
+    expect([json['data']].count).to eq(1)
+  end
+
+  it 'can get its related item' do
+    item = create(:item)
+    invoice_item = create(:invoice_item, item: item)
+
+    get "/api/v1/invoice_items/#{invoice_item.id}/item"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data']['id']).to eq(item.id.to_s)
+    expect([json['data']].count).to eq(1)
   end
 end
