@@ -52,4 +52,22 @@ describe 'Invoices API' do
       expect(ids.include?(t['id'])).to be true
     end
   end
+
+  it 'can get an index of associated invoice_items' do
+    invoice = create(:invoice)
+    invoice_item_1 = create(:invoice_item, invoice: invoice)
+    invoice_item_2 = create(:invoice_item, invoice: invoice)
+    invoice_item_3 = create(:invoice_item)
+
+    get "/api/v1/invoices/#{invoice.id}/invoice_items"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+    ids = [invoice_item_1, invoice_item_2].map { |ii| ii.id.to_s }
+
+    json['data'].each do |inv_item|
+      expect(ids.include?(inv_item['id'])).to be true
+    end
+  end
 end
