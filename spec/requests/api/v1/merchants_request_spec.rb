@@ -116,6 +116,31 @@ describe "Merchants API" do
     expect(json['data']).to eq([])
   end
 
+  it 'can return the total_revenue for all merchants on a given date' do
+    merchant_1 = create(:merchant)
+    merchant_2 = create(:merchant)
+
+    invoice_1 = create(:invoice, merchant: merchant_1, created_at: '2019-10-02')
+    invoice_2 = create(:invoice, merchant: merchant_2, created_at: '2019-10-02')
+    invoice_3 = create(:invoice, merchant: merchant_2, created_at: '2019-10-02')
+
+    create(:invoice_item, invoice: invoice_1, quantity: 2, unit_price: 1000)
+    create(:invoice_item, invoice: invoice_2, quantity: 1, unit_price: 5000)
+    create(:invoice_item, invoice: invoice_3, quantity: 1, unit_price: 9999)
+
+    create(:transaction, invoice: invoice_1)
+    create(:transaction, invoice: invoice_2)
+    create(:transaction, invoice: invoice_3, result: 'failed')
+
+    get "/api/v1/merchants/revenue?date=2019-10-02"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+    binding.pry
+    expect(json['data']).to eq({'total_revenue'=>'70.00'})
+  end
+
   it 'can return the customer who has the most successful transactions' do
     merchant = create(:merchant)
 
