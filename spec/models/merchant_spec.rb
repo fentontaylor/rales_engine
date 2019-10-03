@@ -43,5 +43,57 @@ describe Merchant do
 
       expect( Merchant.most_revenue(1) ).to eq([merchant_3])
     end
+
+    it '::revenue' do
+      merchant_1 = create(:merchant)
+      merchant_2 = create(:merchant)
+
+      invoice_1 = create(:invoice, merchant: merchant_1, created_at: '2019-10-02')
+      invoice_2 = create(:invoice, merchant: merchant_2, created_at: '2019-10-02')
+      invoice_3 = create(:invoice, merchant: merchant_2, created_at: '2019-10-02')
+
+      create(:invoice_item, invoice: invoice_1, quantity: 2, unit_price: 1000)
+      create(:invoice_item, invoice: invoice_2, quantity: 1, unit_price: 5000)
+      create(:invoice_item, invoice: invoice_3, quantity: 1, unit_price: 9999)
+
+      create(:transaction, invoice: invoice_1)
+      create(:transaction, invoice: invoice_2)
+      create(:transaction, invoice: invoice_3, result: 'failed')
+
+      expect(Merchant.revenue('2019-10-02')).to eq({'total_revenue' => 7000})
+    end
+  end
+
+  describe 'instance methods' do
+    it '#favorite_customer' do
+      merchant = create(:merchant)
+
+      # 1 successful transaction
+      customer_1 = create(:customer)
+      invoice_1 = create(:invoice, merchant: merchant, customer: customer_1)
+      create(:transaction, invoice: invoice_1)
+
+      # 3 successful transactions
+      customer_2 = create(:customer)
+      invoice_2 = create(:invoice, merchant: merchant, customer: customer_2)
+      invoice_3 = create(:invoice, merchant: merchant, customer: customer_2)
+      invoice_4 = create(:invoice, merchant: merchant, customer: customer_2)
+      create(:transaction, invoice: invoice_2)
+      create(:transaction, invoice: invoice_3)
+      create(:transaction, invoice: invoice_4)
+
+      # 2 successful transactions, 2 failed
+      customer_3 = create(:customer)
+      invoice_5 = create(:invoice, merchant: merchant, customer: customer_3)
+      invoice_6 = create(:invoice, merchant: merchant, customer: customer_3)
+      invoice_7 = create(:invoice, merchant: merchant, customer: customer_3)
+      invoice_8 = create(:invoice, merchant: merchant, customer: customer_3)
+      create(:transaction, invoice: invoice_5)
+      create(:transaction, invoice: invoice_6)
+      create(:transaction, invoice: invoice_7, result: 'failed')
+      create(:transaction, invoice: invoice_8, result: 'failed')
+
+      expect(merchant.favorite_customer).to eq(customer_2)
+    end
   end
 end
