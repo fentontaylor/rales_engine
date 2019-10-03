@@ -13,6 +13,17 @@ class Api::V1::Merchants::SearchController < ApplicationController
     render json: MerchantSerializer.new( merchant )
   end
 
+  def index
+    merchant = case search_params.keys.first
+    when 'id'
+      Merchant.all_by_id( search_params[:id] )
+    when 'name'
+    when 'created_at'
+    when 'updated_at'
+    end
+    render json: MerchantSerializer.new( merchant )
+  end
+
   private
 
   def search_params

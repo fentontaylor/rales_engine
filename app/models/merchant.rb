@@ -48,6 +48,10 @@ class Merchant < ApplicationRecord
     where(args).first
   end
 
+  def self.all_by_id(id)
+    where(id: id)
+  end
+
   def favorite_customer
     sql = "SELECT c.*, count(*) as num_transactions " +
             "FROM customers c " +

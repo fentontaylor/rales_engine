@@ -64,4 +64,15 @@ describe 'Merchants API' do
     expect(json['data']['id']).to eq(merchant_2.id.to_s)
     expect([json['data']].count).to eq(1)
   end
+
+  it 'can find all merchants by id' do
+    merchant_1 = create(:merchant)
+    merchant_2 = create(:merchant)
+
+    get "/api/v1/merchants/find_all?id=#{merchant_2.id}"
+
+    json = JSON.parse (response.body)
+
+    expect(json['data'].first['id']).to eq(merchant_2.id.to_s)
+  end
 end
