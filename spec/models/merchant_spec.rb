@@ -62,6 +62,14 @@ describe Merchant do
 
       expect(Merchant.revenue('2019-10-02')).to eq({'total_revenue' => 7000})
     end
+
+    it '::find_by_lower_name' do
+      merchant = create(:merchant, name: 'Bob Shop')
+
+      expect(Merchant.find_by_lower_name('Bob Shop')).to eq(merchant)
+      expect(Merchant.find_by_lower_name('bob shop')).to eq(merchant)
+      expect(Merchant.find_by_lower_name('BOB SHOP')).to eq(merchant)
+    end
   end
 
   describe 'instance methods' do
