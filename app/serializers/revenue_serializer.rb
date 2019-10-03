@@ -1,8 +1,13 @@
 class RevenueSerializer
   attr_reader :hash
-  
+
   def initialize(hash)
-    @hash = { data: set_dollar_price_as_string(hash) }
+    @hash =
+    {
+      data: {
+        attributes: set_dollar_price_as_string(hash)
+      }
+    }
   end
 
   def set_dollar_price_as_string(hash)

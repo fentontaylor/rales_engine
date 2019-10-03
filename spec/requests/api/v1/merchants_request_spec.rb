@@ -137,8 +137,7 @@ describe "Merchants API" do
     expect(response).to be_successful
 
     json = JSON.parse(response.body)
-    binding.pry
-    expect(json['data']).to eq({'total_revenue'=>'70.00'})
+    expect(json['data']['attributes']).to eq({'total_revenue'=>'70.00'})
   end
 
   it 'can return the customer who has the most successful transactions' do
