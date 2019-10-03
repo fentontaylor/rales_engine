@@ -32,40 +32,42 @@ describe "Merchants API" do
     expect(json['data']['id']).to eq(merchant.id.to_s)
   end
 
-  it 'can return the items of a merchant' do
+  it 'can return an index of merchant items' do
     merchant = create(:merchant)
-    item_1 = create(:item)
-    item_2 = create(:item)
+    item_1 = create(:item, merchant: merchant)
+    item_2 = create(:item, merchant: merchant)
     item_3 = create(:item)
-
-    merchant.items << item_1
-    merchant.items << item_2
 
     get "/api/v1/merchants/#{merchant.id}/items"
 
     expect(response).to be_successful
 
-    expect(response.body.include?(item_1.name)).to be true
-    expect(response.body.include?(item_2.name)).to be true
-    expect(response.body.include?(item_3.name)).to be false
+    ids = [item_1, item_2].map { |i| i.id.to_s}
+
+    json = JSON.parse(response.body)
+
+    json['data'].each do |item|
+      expect(ids.include? item['id']).to be true
+    end
   end
 
   it 'can return the invoices of a merchant' do
     merchant = create(:merchant)
-    invoice_1 = create(:invoice)
-    invoice_2 = create(:invoice)
+    invoice_1 = create(:invoice, merchant: merchant)
+    invoice_2 = create(:invoice, merchant: merchant)
     invoice_3 = create(:invoice)
-
-    merchant.invoices << invoice_1
-    merchant.invoices << invoice_2
 
     get "/api/v1/merchants/#{merchant.id}/invoices"
 
     expect(response).to be_successful
 
+    ids = [invoice_1, invoice_2].map { |i| i.id.to_s}
+
     json = JSON.parse(response.body)
 
-    expect(json['data'].count).to eq(2)
+    json['data'].each do |invoice|
+      expect(ids.include? invoice['id']).to be true
+    end
   end
 
   it 'can return the top x merchants, ranked by total revenue' do
