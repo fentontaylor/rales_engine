@@ -33,4 +33,23 @@ describe 'Invoices API' do
 
     expect(json['data']['id']).to eq(invoice.id.to_s)
   end
+
+  it 'can get an index of associated transactions' do
+    invoice = create(:invoice)
+    transaction_1 = create(:transaction, invoice: invoice)
+    transaction_2 = create(:transaction, invoice: invoice)
+    transaction_3 = create(:transaction, invoice: invoice)
+    transaction_4 = create(:transaction)
+
+    get "/api/v1/invoices/#{invoice.id}/transactions"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+    ids = [transaction_1, transaction_2, transaction_3].map { |t| t.id.to_s }
+
+    json['data'].each do |t|
+      expect(ids.include?(t['id'])).to be true
+    end
+  end
 end
