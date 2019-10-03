@@ -39,8 +39,9 @@ class Merchant < ApplicationRecord
     result.first
   end
 
-  def self.find_by_lower_name(name)
-    where('lower(name) like ?', "%#{name.downcase}%").first
+  def self.find_by_lower_name(name, all: true)
+    result = where('lower(name) like ?', "%#{name.downcase}%")
+    all ? result : result.first
   end
 
   def self.find_by_flex_date(args)
