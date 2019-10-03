@@ -44,7 +44,7 @@ class Merchant < ApplicationRecord
   end
 
   def self.find_by_flex_date(args)
-    args.transform_values! { |v| DateTime.xmlschema(v)}
+    args.transform_values! { |v| DateTime.xmlschema(v) }
     where(args).first
   end
 
