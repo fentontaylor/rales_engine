@@ -28,7 +28,15 @@ class Merchant < ApplicationRecord
   end
 
   def self.revenue(date)
+    sql = "SELECT SUM(ii.quantity * ii.unit_price) as total_revenue " +
+            "FROM invoices i " +
+            "INNER JOIN invoice_items ii ON i.id = ii.invoice_id " +
+            "INNER JOIN transactions t ON t.invoice_id = i.id " +
+            "WHERE date(i.created_at) = '#{date}' " +
+              "AND t.result = 'success'"
 
+    result = ActiveRecord::Base.connection.execute(sql)
+    result.first
   end
 
   def favorite_customer
@@ -41,6 +49,7 @@ class Merchant < ApplicationRecord
             "GROUP BY c.id " +
             "ORDER BY num_transactions DESC, c.id " +
             "LIMIT 1"
+
     result = ActiveRecord::Base.connection.execute(sql)
     Customer.find(result.first['id'])
   end

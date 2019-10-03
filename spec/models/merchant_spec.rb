@@ -43,6 +43,25 @@ describe Merchant do
 
       expect( Merchant.most_revenue(1) ).to eq([merchant_3])
     end
+
+    it '::revenue' do
+      merchant_1 = create(:merchant)
+      merchant_2 = create(:merchant)
+
+      invoice_1 = create(:invoice, merchant: merchant_1, created_at: '2019-10-02')
+      invoice_2 = create(:invoice, merchant: merchant_2, created_at: '2019-10-02')
+      invoice_3 = create(:invoice, merchant: merchant_2, created_at: '2019-10-02')
+
+      create(:invoice_item, invoice: invoice_1, quantity: 2, unit_price: 1000)
+      create(:invoice_item, invoice: invoice_2, quantity: 1, unit_price: 5000)
+      create(:invoice_item, invoice: invoice_3, quantity: 1, unit_price: 9999)
+
+      create(:transaction, invoice: invoice_1)
+      create(:transaction, invoice: invoice_2)
+      create(:transaction, invoice: invoice_3, result: 'failed')
+
+      expect(Merchant.revenue('2019-10-02')).to eq({'total_revenue' => 7000})
+    end
   end
 
   describe 'instance methods' do
