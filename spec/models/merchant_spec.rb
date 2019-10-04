@@ -65,10 +65,15 @@ describe Merchant do
 
     it '::find_by_lower_name' do
       merchant = create(:merchant, name: 'Bob Shop')
+      merchant_2 = create(:merchant, name: 'Bob Shop 2')
 
-      expect(Merchant.find_by_lower_name('Bob Shop')).to eq(merchant)
-      expect(Merchant.find_by_lower_name('bob shop')).to eq(merchant)
-      expect(Merchant.find_by_lower_name('BOB SHOP')).to eq(merchant)
+      expect(Merchant.find_by_lower_name('Bob Shop', all: false)).to eq(merchant)
+      expect(Merchant.find_by_lower_name('bob shop', all: false)).to eq(merchant)
+      expect(Merchant.find_by_lower_name('BOB SHOP', all: false)).to eq(merchant)
+
+      expect(Merchant.find_by_lower_name('bob shop')).to eq([merchant, merchant_2])
+
+      expect(Merchant.find_by_lower_name('bob')).to eq([merchant, merchant_2])
     end
 
     it '::find_by_flex_date' do
