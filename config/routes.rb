@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
       namespace :items do
         get '/most_revenue', to: 'most_revenue#index'
+        get '/:id/best_day', to: 'best_day#show'
       end
       resources :items, only: [:index, :show]
 

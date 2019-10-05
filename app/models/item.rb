@@ -33,7 +33,7 @@ class Item < ApplicationRecord
           "INNER JOIN transactions t ON inv.id = t.invoice_id " +
           "WHERE t.result = 'success' AND i.id = #{id} " +
           "GROUP BY date " +
-          "ORDER BY num_sold DESC " +
+          "ORDER BY num_sold DESC, date DESC " +
           "LIMIT 1) dates"
     )
     ActiveRecord::Base.connection.execute(sql).first
