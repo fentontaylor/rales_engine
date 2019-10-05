@@ -24,7 +24,7 @@ class Item < ApplicationRecord
 
   def best_day
     id = self.id.to_i
-    sql = (
+    ActiveRecord::Base.connection.execute(
       "SELECT date as best_day FROM " +
         "(SELECT DATE(inv.created_at) as date, SUM(ii.quantity) num_sold " +
           "FROM items i " +
@@ -35,7 +35,6 @@ class Item < ApplicationRecord
           "GROUP BY date " +
           "ORDER BY num_sold DESC, date DESC " +
           "LIMIT 1) dates"
-    )
-    ActiveRecord::Base.connection.execute(sql).first
+    ).first
   end
 end
