@@ -34,4 +34,8 @@ describe 'Items API' do
 
     expect(json['data']['id']).to eq(item.id.to_s)
   end
+
+  it 'can return the top x items ranked by total revenue' do
+    
+  end
 end
