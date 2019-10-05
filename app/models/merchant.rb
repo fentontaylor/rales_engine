@@ -39,18 +39,23 @@ class Merchant < ApplicationRecord
     result.first
   end
 
-  def self.find_by_lower_name(name, all: true)
-    result = where('lower(name) like ?', "%#{name.downcase}%")
-    all ? result : result.first
+  def self.search(search_params, multiple: false)
+    merchants = case search_params.keys.first
+    when 'id', 'created_at', 'updated_at'
+      Merchant.where( search_params )
+    when 'name'
+      Merchant.name_search( search_params[:name] )
+    end
+    multiple ? merchants : merchants.first
   end
 
-  def self.find_by_flex_date(args)
+  def self.name_search(name)
+    where('lower(name) like ?', "%#{name.downcase}%")
+  end
+
+  def self.date_search(args)
     args.transform_values! { |v| DateTime.xmlschema(v) }
     where(args).first
-  end
-
-  def self.all_by_id(id)
-    where(id: id)
   end
 
   def favorite_customer
