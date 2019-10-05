@@ -22,6 +22,10 @@ Rails.application.routes.draw do
       end
 
       resources :invoices, only: [:index, :show]
+
+      namespace :items do
+        get '/most_revenue', to: 'most_revenue#index'
+      end
       resources :items, only: [:index, :show]
 
       namespace :invoice_items do
