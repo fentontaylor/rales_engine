@@ -11,6 +11,7 @@ describe Item do
     it { should belong_to :merchant }
     it { should have_many :invoice_items }
     it { should have_many(:invoices).through(:invoice_items) }
+    it { should have_many(:transactions).through(:invoices) }
   end
 
   describe 'class methods' do
@@ -61,6 +62,46 @@ describe Item do
       expect(Item.most_revenue(1)).to eq([item_3])
       expect(Item.most_revenue(2)).to eq([item_3, item_4])
       expect(Item.most_revenue(3)).to eq([item_3, item_4, item_2])
+    end
+  end
+
+  describe 'instance methods' do
+    it '#best_day' do
+      item = create(:item, unit_price: 1000)
+
+      # day_1: num_sold = 1
+      invoice_1 = create(:invoice, created_at: '2019-10-05 12:34:56 UTC')
+      create(:invoice_item, invoice: invoice_1, item: item, quantity: 1)
+      create(:transaction, invoice: invoice_1)
+
+      # day_2: num_sold = 2
+      invoice_2 = create(:invoice, created_at: '2019-10-04 12:34:56 UTC')
+      invoice_3 = create(:invoice, created_at: '2019-10-04 12:34:56 UTC')
+      create(:invoice_item, invoice: invoice_2, item: item, quantity: 1)
+      create(:invoice_item, invoice: invoice_3, item: item, quantity: 1)
+      create(:transaction, invoice: invoice_2)
+      create(:transaction, invoice: invoice_3)
+
+      # day_3: num_sold = 4
+      invoice_4 = create(:invoice, created_at: '2019-10-03 12:34:56 UTC')
+      invoice_5 = create(:invoice, created_at: '2019-10-03 12:34:56 UTC')
+      create(:invoice_item, invoice: invoice_4, item: item, quantity: 2)
+      create(:invoice_item, invoice: invoice_5, item: item, quantity: 2)
+      create(:transaction, invoice: invoice_4)
+      create(:transaction, invoice: invoice_5)
+
+      # day_4: num_sold = 3
+      invoice_6 = create(:invoice, created_at: '2019-10-01 12:34:56 UTC')
+      invoice_7 = create(:invoice, created_at: '2019-10-01 12:34:56 UTC')
+      invoice_8 = create(:invoice, created_at: '2019-10-01 12:34:56 UTC')
+      create(:invoice_item, invoice: invoice_6, item: item, quantity: 1)
+      create(:invoice_item, invoice: invoice_7, item: item, quantity: 2)
+      create(:invoice_item, invoice: invoice_8, item: item, quantity: 2)
+      create(:transaction, invoice: invoice_6)
+      create(:transaction, invoice: invoice_7)
+      create(:transaction, invoice: invoice_8, result: 'failed')
+
+      expect(item.best_day).to eq({"best_day" => "2019-10-03"})
     end
   end
 end
