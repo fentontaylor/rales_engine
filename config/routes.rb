@@ -35,6 +35,11 @@ Rails.application.routes.draw do
       end
 
       resources :invoice_items, only: [:index, :show]
+
+      namespace :customers do
+        get '/:id/favorite_merchant', to: 'favorite_merchant#show'
+      end
+      
       resources :customers, only: [:index, :show]
       resources :transactions, only: [:index, :show]
     end
