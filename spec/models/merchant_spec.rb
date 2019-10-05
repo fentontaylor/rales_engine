@@ -63,24 +63,24 @@ describe Merchant do
       expect(Merchant.revenue('2019-10-02')).to eq({'total_revenue' => 7000})
     end
 
-    it '::find_by_lower_name' do
+    it '::name_search' do
       merchant = create(:merchant, name: 'Bob Shop')
       merchant_2 = create(:merchant, name: 'Bob Shop 2')
 
-      expect(Merchant.find_by_lower_name('Bob Shop', all: false)).to eq(merchant)
-      expect(Merchant.find_by_lower_name('bob shop', all: false)).to eq(merchant)
-      expect(Merchant.find_by_lower_name('BOB SHOP', all: false)).to eq(merchant)
+      expect(Merchant.name_search('Bob Shop').first).to eq(merchant)
+      expect(Merchant.name_search('bob shop').first).to eq(merchant)
+      expect(Merchant.name_search('BOB SHOP').first).to eq(merchant)
 
-      expect(Merchant.find_by_lower_name('bob shop')).to eq([merchant, merchant_2])
+      expect(Merchant.name_search('bob shop')).to eq([merchant, merchant_2])
 
-      expect(Merchant.find_by_lower_name('bob')).to eq([merchant, merchant_2])
+      expect(Merchant.name_search('bob')).to eq([merchant, merchant_2])
     end
 
-    it '::find_by_flex_date' do
+    it '::date_search' do
       ignore = create(:merchant)
       merchant = create(:merchant, name: 'Bob Shop', created_at: '2019-10-03 09:34:45 UTC')
 
-      expect(Merchant.find_by_flex_date(created_at: '2019-10-03T09:34:45Z'))
+      expect(Merchant.date_search(created_at: '2019-10-03T09:34:45Z'))
     end
   end
 

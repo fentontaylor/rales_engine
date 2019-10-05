@@ -3,7 +3,7 @@ class Api::V1::Merchants::RevenueController < ApplicationController
     date = params[:date]
     if valid_date?(date)
       output = RevenueSerializer.new(Merchant.revenue(date))
-      render json: output.hash
+      render json: output.json
     end
   end
 
