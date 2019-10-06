@@ -4,6 +4,11 @@ class Api::V1::Invoices::SearchController < ApplicationController
     render json: InvoiceSerializer.new( invoice )
   end
 
+  def index
+    invoice = Invoice.where( search_params )
+    render json: InvoiceSerializer.new( invoice )
+  end
+
   private
 
   def search_params

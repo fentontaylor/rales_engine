@@ -84,4 +84,77 @@ describe 'Invoices Search API' do
       expect(json['data']['attributes']['id']).to eq(i2.id)
     end
   end
+
+  describe 'multi-finders' do
+    it 'can return all invoices by id' do
+      i1 = create(:invoice)
+      i2 = create(:invoice)
+
+      get "/api/v1/invoices/find_all?id=#{i2.id}"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(i2.id)
+    end
+
+    it 'can return all invoices by customer_id' do
+      c1 = create(:customer)
+      c2 = create(:customer)
+      i1 = create(:invoice, customer: c1)
+      i2 = create(:invoice, customer: c2)
+
+      get "/api/v1/invoices/find_all?customer_id=#{c2.id}"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(i2.id)
+    end
+
+    it 'can return all invoices by merchant_id' do
+      m1 = create(:merchant)
+      m2 = create(:merchant)
+      i1 = create(:invoice, merchant: m1)
+      i2 = create(:invoice, merchant: m2)
+
+      get "/api/v1/invoices/find_all?merchant_id=#{m2.id}"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(i2.id)
+    end
+
+    it 'can find one invoice by created_at' do
+      i1 = create(:invoice, created_at: '2012-12-13 12:12:12 UTC')
+      i2 = create(:invoice, created_at: '2012-12-13 12:12:12 UTC')
+
+      get "/api/v1/invoices/find_all?created_at=2012-12-13T12:12:12Z"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(i1.id)
+      expect(json['data'][1]['attributes']['id']).to eq(i2.id)
+    end
+
+    it 'can find one invoice by updated_at' do
+      i1 = create(:invoice, updated_at: '2012-12-13 12:12:12 UTC')
+      i2 = create(:invoice, updated_at: '2012-12-13 12:12:12 UTC')
+
+      get "/api/v1/invoices/find_all?updated_at=2012-12-13T12:12:12Z"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(i1.id)
+      expect(json['data'][1]['attributes']['id']).to eq(i2.id)
+    end
+  end
 end
