@@ -16,7 +16,7 @@ describe 'Transactions API' do
     expect(json['data'][0]['type']).to eq('transaction')
     expect(json['data'][0]['attributes']['id']).to eq(transaction_1.id)
     expect(json['data'][0]['attributes']['invoice_id']).to eq(transaction_1.invoice_id)
-    expect(json['data'][0]['attributes']['credit_card_number']).to eq(transaction_1.credit_card_number)
+    expect(json['data'][0]['attributes']['credit_card_number']).to eq(transaction_1.credit_card_number.to_s)
     expect(json['data'][0]['attributes']['result']).to eq(transaction_1.result)
 
     expect(json['data'].count).to eq(3)
