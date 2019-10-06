@@ -49,7 +49,7 @@ class Merchant < ApplicationRecord
     when 'id', 'created_at', 'updated_at'
       Merchant.where( search_params )
     when 'name'
-      Merchant.name_search( search_params[:name] )
+      Merchant.name_search( search_params['name'] )
     end
     multiple ? merchants : merchants.first
   end
