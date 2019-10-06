@@ -12,7 +12,7 @@ class Item < ApplicationRecord
     if search_params['unit_price']
       search_params['unit_price'] = (search_params['unit_price'].to_f * 100).round
     end
-    item = Item.where(search_params)
+    item = Item.where(search_params).order(:id)
     multiple ? item : item.first
   end
 

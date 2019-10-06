@@ -11,7 +11,7 @@ class InvoiceItem < ApplicationRecord
     if search_params['unit_price']
       search_params['unit_price'] = (search_params['unit_price'].to_f * 100).round
     end
-    inv_items = InvoiceItem.where( search_params )
+    inv_items = InvoiceItem.where( search_params ).order(:id)
     multiple ? inv_items : inv_items.first
   end
 
