@@ -123,7 +123,7 @@ describe 'Customers API' do
     end
   end
 
-  it 'can return a random merchant' do
+  it 'can return a random customer' do
     c1 = create(:customer)
     c2 = create(:customer)
     c3 = create(:customer)

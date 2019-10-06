@@ -65,7 +65,7 @@ describe 'InvoiceItems API' do
     expect([json['data']].count).to eq(1)
   end
 
-  it 'can return a random merchant' do
+  it 'can return a random invoice_item' do
     ii1 = create(:invoice_item)
     ii2 = create(:invoice_item)
     ii3 = create(:invoice_item)
@@ -81,5 +81,4 @@ describe 'InvoiceItems API' do
 
     expect(ids.include? result).to be true
   end
-
 end
