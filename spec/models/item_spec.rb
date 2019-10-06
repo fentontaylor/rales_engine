@@ -15,6 +15,44 @@ describe Item do
   end
 
   describe 'class methods' do
+    it '::search' do
+      time = '2019-10-05T19:36:45Z'
+      m1 = create(:merchant)
+      i1 = create( :item,
+        name: 'thing',
+        description: 'its a thing',
+        unit_price: 2325,
+        merchant: m1,
+        created_at: time
+      )
+
+      i2 = create( :item,
+        name: 'widget',
+        description: 'its a widget',
+        unit_price: 1799,
+        merchant: m1,
+        created_at: time
+      )
+
+      result = Item.search({'id' => i1.id})
+      expect(result).to eq(i1)
+
+      result = Item.search({'name' => i1.name})
+      expect(result).to eq(i1)
+
+      result = Item.search({'description' => i2.description})
+      expect(result).to eq(i2)
+
+      result = Item.search({'unit_price' => '17.99'})
+      expect(result).to eq(i2)
+
+      result = Item.search({'created_at' => time }, multiple: true)
+      expect(result).to eq([i1, i2])
+
+      result = Item.search({'updated_at' => time }, multiple: true)
+      expect(result).to eq([i1, i2])
+    end
+
     it '::most_revenue' do
       item_1 = create(:item, unit_price: 1000)
       item_2 = create(:item, unit_price: 1000)
