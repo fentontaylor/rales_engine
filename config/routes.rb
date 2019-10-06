@@ -28,10 +28,11 @@ Rails.application.routes.draw do
       resources :invoices, only: [:index, :show]
 
       namespace :items do
-        get '/most_revenue', to: 'most_revenue#index'
+        get '/find', to: 'search#show'
         get '/:id/best_day', to: 'best_day#show'
         get '/:id/invoice_items', to: 'invoice_items#index'
         get '/:id/merchant', to: 'merchant#show'
+        get '/most_revenue', to: 'most_revenue#index'
         get '/random', to: 'random#show'
       end
       resources :items, only: [:index, :show]

@@ -8,6 +8,14 @@ class Item < ApplicationRecord
   has_many :invoices, through: :invoice_items
   has_many :transactions, through: :invoices
 
+  def self.search(search_params, multiple: false)
+    if search_params['unit_price']
+      search_params['unit_price'] = search_params['unit_price'].to_f * 100
+    end
+    item = Item.where(search_params)
+    multiple ? item : item.first
+  end
+
   def self.most_revenue(qty)
     qty = qty.to_i
     find_by_sql(
