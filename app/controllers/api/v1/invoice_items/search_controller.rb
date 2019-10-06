@@ -4,6 +4,11 @@ class Api::V1::InvoiceItems::SearchController < ApplicationController
     render json: InvoiceItemSerializer.new( inv_item )
   end
 
+  def index
+    inv_item = InvoiceItem.search( search_params, multiple: true )
+    render json: InvoiceItemSerializer.new( inv_item )
+  end
+
   private
 
   def search_params
