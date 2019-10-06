@@ -184,4 +184,21 @@ describe 'Items API' do
 
     expect(json['data']['attributes']).to eq({"best_day" => "2019-10-03"})
   end
+
+  it 'can return a random item' do
+    i1 = create(:item)
+    i2 = create(:item)
+    i3 = create(:item)
+
+    get '/api/v1/items/random'
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    ids = [i1, i2, i3].map { |i| i.id }
+    result = json['data']['attributes']['id']
+
+    expect(ids.include? result).to be true
+  end
 end

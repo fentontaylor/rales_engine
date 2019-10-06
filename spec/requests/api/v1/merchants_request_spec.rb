@@ -178,4 +178,21 @@ describe "Merchants API" do
 
     expect(json['data']['attributes']['id']).to eq(customer_2.id)
   end
+
+  it 'can return a random merchant' do
+    m1 = create(:merchant)
+    m2 = create(:merchant)
+    m3 = create(:merchant)
+
+    get '/api/v1/merchants/random'
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    ids = [m1, m2, m3].map { |m| m.id }
+    result = json['data']['attributes']['id']
+
+    expect(ids.include? result).to be true
+  end
 end
