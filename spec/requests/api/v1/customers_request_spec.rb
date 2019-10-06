@@ -123,4 +123,20 @@ describe 'Customers API' do
     end
   end
 
+  it 'can return a random merchant' do
+    c1 = create(:customer)
+    c2 = create(:customer)
+    c3 = create(:customer)
+
+    get '/api/v1/customers/random'
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    ids = [c1, c2, c3].map { |c| c.id }
+    result = json['data']['attributes']['id']
+
+    expect(ids.include? result).to be true
+  end
 end
