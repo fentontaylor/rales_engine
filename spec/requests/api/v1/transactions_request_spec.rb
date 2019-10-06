@@ -49,4 +49,21 @@ describe 'Transactions API' do
 
     expect(json['data']['attributes']['id']).to eq(inv1.id)
   end
+
+  it 'can return a random transaction' do
+    t1 = create(:transaction)
+    t2 = create(:transaction)
+    t3 = create(:transaction)
+
+    get '/api/v1/transactions/random'
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    ids = [t1, t2, t3].map { |t| t.id }
+    result = json['data']['attributes']['id']
+
+    expect(ids.include? result).to be true
+  end
 end
