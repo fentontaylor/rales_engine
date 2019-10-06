@@ -94,6 +94,90 @@ describe 'Items Search API' do
 
       expect(json['data']['attributes']['id']).to eq(i2.id)
     end
+  end
 
+  describe 'multi-finders' do
+    it 'can find all items by id' do
+      i1 = create(:item)
+      i2 = create(:item)
+
+      get "/api/v1/items/find_all?id=#{i2.id}"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(i2.id)
+    end
+
+    it 'can find all items by name' do
+      i1 = create(:item, name: 'Thing')
+      i2 = create(:item, name: 'Thing')
+
+      get "/api/v1/items/find_all?name=Thing"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(i1.id)
+      expect(json['data'][1]['attributes']['id']).to eq(i2.id)
+    end
+
+    it 'can find all items by description' do
+      i1 = create(:item, description: 'its a thing')
+      i2 = create(:item, description: 'its a thing')
+
+      get "/api/v1/items/find_all?description=its a thing"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(i1.id)
+      expect(json['data'][1]['attributes']['id']).to eq(i2.id)
+    end
+
+    it 'can find all items by unit_price' do
+      i1 = create(:item, unit_price: 2325)
+      i2 = create(:item, unit_price: 2325)
+
+      get "/api/v1/items/find_all?unit_price=23.25"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(i1.id)
+      expect(json['data'][1]['attributes']['id']).to eq(i2.id)
+    end
+
+    it 'can find all items by created_at' do
+      i1 = create(:item, created_at: '2018-12-25 12:23:23 UTC')
+      i2 = create(:item, created_at: '2018-12-25 12:23:23 UTC')
+
+      get "/api/v1/items/find_all?created_at=2018-12-25T12:23:23Z"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(i1.id)
+      expect(json['data'][1]['attributes']['id']).to eq(i2.id)
+    end
+
+    it 'can find all items by updated_at' do
+      i1 = create(:item, updated_at: '2018-12-25 12:23:23 UTC')
+      i2 = create(:item, updated_at: '2018-12-25 12:23:23 UTC')
+
+      get "/api/v1/items/find_all?updated_at=2018-12-25T12:23:23Z"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(i1.id)
+      expect(json['data'][1]['attributes']['id']).to eq(i2.id)
+    end
   end
 end
