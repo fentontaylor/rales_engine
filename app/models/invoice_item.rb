@@ -7,6 +7,13 @@ class InvoiceItem < ApplicationRecord
   belongs_to :item
   belongs_to :invoice
 
+  def self.search(search_params, multiple: false)
+    if search_params['unit_price']
+      search_params['unit_price'] = search_params['unit_price'].to_f * 100
+    end
+    InvoiceItem.find_by( search_params )
+  end
+
   def dollar_price_as_string
     digits = self.unit_price.to_s.split('')
     cents = digits.pop(2)
