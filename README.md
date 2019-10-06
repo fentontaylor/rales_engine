@@ -18,16 +18,20 @@ All resource endpoints can be queried to return all records or one specific reco
 
 **Search Feature**
 You can return the first instance or all instances of records that meet the search critera using the `/find` and `/find_all` endpoints. Search endpoints need exactly one query param. All resources can be queried using any of their attributes, including id. For example, merchants can be queried using id, name, created_at, updated_at. See below for examples.
-Values for created_at/updated_at must be exactly in the format below. More dynamic searching by date will be added in v2.
+
 
 - `/api/v1/merchants/find?id=23`
 - `/api/v1/merchants/find?name=Willms and Sons`
 - `/api/v1/merchants/find?created_at=2012-03-27T14:54:01Z`
-
-- `/api/v1/merchants/find_all?updated_at=2012-03-27T14:54:01Z`
 - `/api/v1/items/find_all?merchant_id=23`
 
+*Note: Values for created_at/updated_at, and for unit_price must be exactly in the format below. More dynamic searching by date will be added in v2.*
+
+- `/api/v1/merchants/find_all?updated_at=2012-03-27T14:54:01Z`
+- `/api/v1/items/find_all?unit_price=23.75`
+
 **Business Intelligence Endpoints**
+
 *All Merchants*
 - `/api/v1/merchants/most_revenue?quantity=x` returns the top x merchants ranked by total revenue
 - `/api/v1/merchants/revenue?date=x` returns the total revenue for date x across all merchants
