@@ -66,4 +66,30 @@ describe 'Customers API' do
     expect(json['data']['attributes']['id']).to eq(merchant_2.id)
     expect(json['data']['attributes']['name']).to eq(merchant_2.name)
   end
+
+  it 'can get an index of associated invoices' do
+    sue = create(:customer)
+    inv_1 = create(:invoice, customer: sue)
+    inv_2 = create(:invoice, customer: sue)
+    inv_3 = create(:invoice, customer: sue)
+    not_for_sue = create(:invoice)
+
+    get "/api/v1/customers/#{sue.id}/invoices"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data'].count).to eq(3)
+
+    ids = [inv_1, inv_2, inv_3].map { |inv| inv.id.to_s }
+
+    json['data'].each do |t|
+      expect(ids.include?(t['id'])).to be true
+    end
+
+    result = json['data'].none? do |t|
+      t['id'] == not_for_sue.id.to_s
+    end
+  end
 end
