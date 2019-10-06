@@ -26,4 +26,43 @@ describe 'Customer search API' do
 
     expect(json['data']['attributes']['id']).to eq(c2.id)
   end
+
+  it 'can find one customer by id' do
+    c1 = create(:customer, last_name: 'Bob')
+    c2 = create(:customer, last_name: 'Sue')
+
+    get "/api/v1/customers/find?last_name=#{c2.last_name}"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data']['attributes']['id']).to eq(c2.id)
+  end
+
+  it 'can find one customer by id' do
+    c1 = create(:customer, created_at: '2017-05-23 09:04:34 UTC')
+    c2 = create(:customer, created_at: '2017-05-25 09:04:34 UTC')
+
+    get "/api/v1/customers/find?created_at=2017-05-25T09:04:34Z"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data']['attributes']['id']).to eq(c2.id)
+  end
+
+  it 'can find one customer by id' do
+    c1 = create(:customer, updated_at: '2017-05-23 09:04:34 UTC')
+    c2 = create(:customer, updated_at: '2017-05-25 09:04:34 UTC')
+
+    get "/api/v1/customers/find?updated_at=2017-05-25T09:04:34Z"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data']['attributes']['id']).to eq(c2.id)
+  end
 end
