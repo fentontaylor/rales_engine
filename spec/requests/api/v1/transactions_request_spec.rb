@@ -34,4 +34,19 @@ describe 'Transactions API' do
     expect(json['data']['id']).to eq(transaction.id.to_s)
     expect([json['data']].count).to eq(1)
   end
+
+  it 'can get its associated invoices' do
+    inv1 = create(:invoice)
+    inv2 = create(:invoice)
+    t1 = create(:transaction, invoice: inv1)
+    t2 = create(:transaction, invoice: inv2)
+
+    get "/api/v1/transactions/#{t1.id}/invoice"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data']['attributes']['id']).to eq(inv1.id)
+  end
 end

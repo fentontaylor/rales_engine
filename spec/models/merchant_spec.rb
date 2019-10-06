@@ -14,6 +14,24 @@ describe Merchant do
   end
 
   describe 'class methods' do
+    it '::search' do
+      time = '2019-10-05T19:36:45Z'
+      merchant_1 = create(:merchant, name: 'Shop', created_at: time)
+      merchant_2 = create(:merchant, name: 'Market', created_at: time)
+
+      result = Merchant.search({'id' => merchant_1.id})
+      expect(result).to eq(merchant_1)
+
+      result = Merchant.search({'name' => merchant_1.name})
+      expect(result).to eq(merchant_1)
+
+      result = Merchant.search({'created_at' => time})
+      expect(result).to eq(merchant_1)
+
+      result = Merchant.search({'created_at' => time}, multiple: true)
+      expect(result).to eq([merchant_1, merchant_2])
+    end
+
     it '::most_revenue' do
       # has one huge sale, but the transaction failed
       merchant_1 = create(:merchant)
