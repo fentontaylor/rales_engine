@@ -81,5 +81,61 @@ describe 'Customer search API' do
 
       expect(json['data'][0]['attributes']['id']).to eq(c2.id)
     end
+
+    it 'can find all customers by first_name' do
+      c1 = create(:customer, first_name: 'Sue', last_name: 'Smith')
+      c2 = create(:customer, first_name: 'Sue', last_name: 'Bob')
+
+      get "/api/v1/customers/find_all?first_name=Sue"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(c1.id)
+      expect(json['data'][1]['attributes']['id']).to eq(c2.id)
+    end
+
+    it 'can find all customers by last_name' do
+      c1 = create(:customer, first_name: 'Bob', last_name: 'Smith')
+      c2 = create(:customer, first_name: 'Sue', last_name: 'Smith')
+
+      get "/api/v1/customers/find_all?last_name=Smith"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(c1.id)
+      expect(json['data'][1]['attributes']['id']).to eq(c2.id)
+    end
+
+    it 'can find all customers by created_at' do
+      c1 = create(:customer, created_at: '2015-09-21 05:18:48 UTC')
+      c2 = create(:customer, created_at: '2015-09-21 05:18:48 UTC')
+
+      get "/api/v1/customers/find_all?created_at=2015-09-21T05:18:48Z"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(c1.id)
+      expect(json['data'][1]['attributes']['id']).to eq(c2.id)
+    end
+
+    it 'can find all customers by updated_at' do
+      c1 = create(:customer, updated_at: '2015-09-21 05:18:48 UTC')
+      c2 = create(:customer, updated_at: '2015-09-21 05:18:48 UTC')
+
+      get "/api/v1/customers/find_all?updated_at=2015-09-21T05:18:48Z"
+
+      expect(response).to be_successful
+
+      json = JSON.parse(response.body)
+
+      expect(json['data'][0]['attributes']['id']).to eq(c1.id)
+      expect(json['data'][1]['attributes']['id']).to eq(c2.id)
+    end
   end
 end
