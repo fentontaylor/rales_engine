@@ -101,17 +101,17 @@ describe 'Invoices Search API' do
 
     it 'can return all invoices by customer_id' do
       c1 = create(:customer)
-      c2 = create(:customer)
       i1 = create(:invoice, customer: c1)
-      i2 = create(:invoice, customer: c2)
+      i2 = create(:invoice, customer: c1)
 
-      get "/api/v1/invoices/find_all?customer_id=#{c2.id}"
+      get "/api/v1/invoices/find_all?customer_id=#{c1.id}"
 
       expect(response).to be_successful
 
       json = JSON.parse(response.body)
 
-      expect(json['data'][0]['attributes']['id']).to eq(i2.id)
+      expect(json['data'][0]['attributes']['id']).to eq(i1.id)
+      expect(json['data'][1]['attributes']['id']).to eq(i2.id)
     end
 
     it 'can return all invoices by merchant_id' do
