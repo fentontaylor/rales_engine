@@ -60,6 +60,23 @@ describe 'Items API' do
     end
   end
 
+  it 'can return all of its associated invoice_items' do
+    merchant_1 = create(:merchant)
+    merchant_2 = create(:merchant)
+
+    item_1 = create(:item, merchant: merchant_1)
+    item_2 = create(:item, merchant: merchant_2)
+
+    get "/api/v1/items/#{item_1.id}/merchant"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data']['attributes']['id']).to eq(merchant_1.id)
+    expect(json['data']['attributes']['name']).to eq(merchant_1.name)
+  end
+
   it 'can return the top x items ranked by total revenue' do
     item_1 = create(:item, unit_price: 1000)
     item_2 = create(:item, unit_price: 1000)
