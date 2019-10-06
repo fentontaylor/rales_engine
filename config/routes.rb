@@ -43,6 +43,10 @@ Rails.application.routes.draw do
       end
 
       resources :customers, only: [:index, :show]
+
+      namespace :transactions do
+        get '/:id/invoice', to: 'invoice#show'
+      end
       resources :transactions, only: [:index, :show]
     end
   end
