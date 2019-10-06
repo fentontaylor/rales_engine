@@ -10,7 +10,7 @@ class Item < ApplicationRecord
 
   def self.search(search_params, multiple: false)
     if search_params['unit_price']
-      search_params['unit_price'] = search_params['unit_price'].to_f * 100
+      search_params['unit_price'] = (search_params['unit_price'].to_f * 100).round
     end
     item = Item.where(search_params)
     multiple ? item : item.first

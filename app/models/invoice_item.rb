@@ -9,7 +9,7 @@ class InvoiceItem < ApplicationRecord
 
   def self.search(search_params, multiple: false)
     if search_params['unit_price']
-      search_params['unit_price'] = search_params['unit_price'].to_f * 100
+      search_params['unit_price'] = (search_params['unit_price'].to_f * 100).round
     end
     inv_items = InvoiceItem.where( search_params )
     multiple ? inv_items : inv_items.first

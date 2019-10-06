@@ -43,9 +43,9 @@ describe 'Items Search API' do
 
     it 'can find one item by unit_price' do
       i1 = create(:item, unit_price: 2000)
-      i2 = create(:item, unit_price: 2500)
+      i2 = create(:item, unit_price: 27409)
 
-      get "/api/v1/items/find?unit_price=25.00"
+      get "/api/v1/items/find?unit_price=274.09"
 
       expect(response).to be_successful
 

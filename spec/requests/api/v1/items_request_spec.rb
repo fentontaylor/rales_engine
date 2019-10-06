@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'Items API' do
   it 'can get an index of items' do
-    item_1 = create(:item)
+    item_1 = create(:item, unit_price: 3275)
     item_2 = create(:item)
     item_3 = create(:item)
 
@@ -18,7 +18,7 @@ describe 'Items API' do
     expect(json['data'][0]['attributes']['name']).to eq(item_1.name)
     expect(json['data'][0]['attributes']['description']).to eq(item_1.description)
     expect(json['data'][0]['attributes']['merchant_id']).to eq(item_1.merchant_id)
-    expect(json['data'][0]['attributes']['unit_price']).to eq(item_1.unit_price)
+    expect(json['data'][0]['attributes']['unit_price']).to eq("32.75")
 
     expect(json['data'].count).to eq(3)
   end
