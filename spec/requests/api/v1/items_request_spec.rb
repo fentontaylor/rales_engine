@@ -35,6 +35,31 @@ describe 'Items API' do
     expect(json['data']['id']).to eq(item.id.to_s)
   end
 
+  it 'can return all of its associated invoice_items' do
+    item = create(:item)
+
+    ii_1 = create(:invoice_item, item: item)
+    ii_2 = create(:invoice_item, item: item)
+    ii_3 = create(:invoice_item, item: item)
+    ii_4 = create(:invoice_item)
+
+    get "/api/v1/items/#{item.id}/invoice_items"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    ids = [ii_1, ii_2, ii_3].map { |ii| ii.id.to_s }
+
+    json['data'].each do |ii|
+      expect(ids.include?(ii['id'])).to be true
+    end
+
+    result = json['data'].none? do |ii|
+      ii['id'] == ii_4.id.to_s
+    end
+  end
+
   it 'can return the top x items ranked by total revenue' do
     item_1 = create(:item, unit_price: 1000)
     item_2 = create(:item, unit_price: 1000)
